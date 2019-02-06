@@ -1,3 +1,4 @@
+<!-- https://aberezkin.github.io/ng2-image-upload/#/demo -->
 <div class="row">
     <div class="col-md-3"></div>
     <div class="col-md-6">
@@ -5,22 +6,43 @@
         <div class="col-md-12">
             <p class="alert alert-success">Add New Profile
               </p>
-              <form class="form-horizontal">
+              <form class="form-horizontal" #addProfileForm = "ngForm">
 
                   <div class="col-md-12">
                     <div class="form-group">
                       <label for="fullname">Fullname : </label>
                       <input id="fullname" class="form-control" 
                         type="text"
-                        name="fullname" required maxlength="30"
+                        name="fullname" required 
+                        maxlength="30"
+                        [(ngModel)] = "model.fullname"
+                        #fullname = "ngModel"
                         >
+                        <p 
+                        *ngIf="fullname.errors && (fullname.dirty || fullname.touched)"
+                        class="alert alert-danger"
+                        >
+                          <span [hidden]="!fullname.errors.required">
+                            <span>Fullname is required.</span>
+                          </span>
+                        </p>
                     </div>
                     <div class="form-group">
                       <label for="age">Age :</label>
                       <input id="age" class="form-control" 
                         type="text"
-                        name="age" required maxlength="30"
+                        name="age" required 
+                        [(ngModel)] = "model.age"
+                        #age = "ngModel"
                         >
+                        <p 
+                        *ngIf="age.errors && (age.dirty || age.touched)"
+                        class="alert alert-danger"
+                        >
+                          <span [hidden]="!age.errors.required">
+                            <span>Age is required.</span>
+                          </span>
+                        </p>
                     </div>
                     <div class="form-group">
                       <label for="image">Image :</label><br/>
@@ -29,15 +51,20 @@
                       [buttonCaption] = "'Select Photo'"
                       [dropBoxMessage] = "''"
                       [extensions] =  "['jpg','jpeg','png','gif']"
-                      (onFileUploadFinish) = "imageUploaded($event)"
-                      (onRemove) = "imageRemoved($event)"
+                      (uploadFinished) = "imageUploaded($event)"
+                      (removed) = "imageRemoved($event)"
                       ></image-upload>
                       <img src="{{ file_src }}" height="100px" width="200px"/>
                     </div>
                     <div class="form-group">
-                        <button type="button" class="btn btn-success">SAVE</button>
+                        <button type="button" class="btn btn-success"
+                        [disabled] = "!addProfileForm.form.valid"
+                        >SAVE</button>
                         &nbsp;
-                        <a name="" id="" class="btn btn-info" href="#" role="button">
+                        <a class="btn btn-info " 
+                        role="button"
+                        (click) = "goBack()"
+                        >
                             CANCEL
                         </a>
                       </div>
